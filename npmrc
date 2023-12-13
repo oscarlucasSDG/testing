@@ -1,2 +1,2 @@
-registry=https://nexus.alm.europe.cloudcenter.corp/repository/npm-public
+registry=https://registry.npmjs.org/ 
 strict-ssl=false

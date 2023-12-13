@@ -16,7 +16,7 @@
     "durable-functions": "^1.5.2",
     "got": "^11.8.6",
     "util": "^0.12.5",
-    "snowflake-sdk": "1.6.8",
+    "snowflake-sdk": "1.9.2",
     "hpagent": "^0.1.1",
     "https-proxy-agent": "^5.0.0"
   },
