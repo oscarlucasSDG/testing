@@ -1,10 +1,7 @@
-const ConfigUtil = require('./helper/Config');
 const snowFlakeClient = require('snowflake-sdk');
 
 //Create snowflake connection
-//const snowflakeConfig = ConfigUtil.getSnowflakeConfig();
-//const { account, username, password, database, schema, warehouse } = snowflakeConfig;
-//console.log(account, username, password, database, schema, warehouse)
+
 const connection = snowFlakeClient.createConnection({
     account: 'II85362.west-europe.azure',
     username: 'OSCARLUCAS',
@@ -14,7 +11,7 @@ const connection = snowFlakeClient.createConnection({
     warehouse: 'TESTING'
 });
 
-  connection.connect((err, conn) => {
+connection.connect((err, conn) => {
     if (err) {
       console.error('Error connecting to Snowflake:', err.message);
       return;
@@ -22,11 +19,14 @@ const connection = snowFlakeClient.createConnection({
     const sqlQueries = [
       'SELECT * FROM testeo WHERE ID=1',
       'SELECT * FROM testeo WHERE ID=2',
+      'SELECT SYSTEM$WAIT(120)',
       'SELECT * FROM testeo WHERE ID=3'
     ];
 
+
+    //console.log("AAA:", conn.getQueryStatus('01b0f5bb-0303-33c5-0000-000210daf025'));
     conn.execute({
-        sqlText: 'SELECT SYSTEM$WAIT(120)',
+        sqlText: 'SELECT * FROM testeo WHERE ID=2',
         complete: (err, stmt, rows) => {
           if (err) {
             console.error('Error executing query:', err.message);
@@ -47,5 +47,11 @@ const connection = snowFlakeClient.createConnection({
       });
       //conn.getQueryStatus('01b0f04d-0303-3125-0000-000210da21d9')
     });
-
-console.log("This is the message")
+const a = connection.getQueryStatus('01b0f5bb-0303-33c5-0000-000210daf025')
+console.log(a)
+    //setTimeout(() => {
+      // Verificar el estado de la consulta
+    //  console.log('Estado de la consulta:', stmt.getStatus());
+    //  }, 20000)
+    //console.log("AAAA:", a)
+//console.log("This is the message")

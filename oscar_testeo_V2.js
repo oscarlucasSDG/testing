@@ -19,9 +19,9 @@ connection.connect((err, conn) => {
 
     // Consultas SQL a ejecutar de manera asíncrona
     const sqlQueries = [
-      'SELECT * FROM testeo WHERE ID=1',
+      'SELECT SYSTEM$WAIT(30)',
       'SELECT * FROM testeo WHERE ID=2',
-      'SELECT * FROM testeo WHERE ID=3'
+      'SELECT SYSTEM$WAIT(10)'
     ];
 
     const queryStatus = {};
@@ -50,26 +50,27 @@ connection.connect((err, conn) => {
     });
 
     // Función para verificar el estado de las consultas
-    function checkQueryStatus() {
-      const success = Object.values(queryStatus).every(status => status === 'success');
+    //function checkQueryStatus() {
+    //  const success = Object.values(queryStatus).every(status => status === 'success');
 
-      if (!success) {
-        setTimeout(checkQueryStatus, 1000); // Verificar cada segundo
-      } else {
-        console.log('Todas las consultas fueron exitosas');
+    //  if (!success) {
+    //    console.log('checkeando status..')
+    //    setTimeout(checkQueryStatus, 1000); // Verificar cada segundo
+    //  } else {
+    //    console.log('Todas las consultas fueron exitosas');
 
         // Cerrar la conexión
-        conn.destroy((err) => {
-          if (err) {
-            console.error('Error al cerrar la conexión: ' + err.message);
-          } else {
-            console.log('Conexión cerrada correctamente');
-          }
-        });
-      }
-    }
+    //    conn.destroy((err) => {
+    //      if (err) {
+    //        console.error('Error al cerrar la conexión: ' + err.message);
+    //      } else {
+    //        console.log('Conexión cerrada correctamente');
+    //      }
+    //    });
+    //  }
+    //}
 
     // Iniciar verificación de estado
-    checkQueryStatus();
+    //checkQueryStatus();
   }
 });
