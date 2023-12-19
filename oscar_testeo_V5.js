@@ -1,12 +1,5 @@
 const snowflake = require('snowflake-sdk');
 
-const queryList = [
-  'SELECT SYSTEM$WAIT(30)',
-  'SELECT * FROM testeo WHERE ID=1',
-  'SELECT * FROM testeo WHERE ID=2'
-];
-
-const queryIDs = [];
 
 const connection = snowflake.createConnection({
   account: 'II85362.west-europe.azure',
@@ -17,6 +10,7 @@ const connection = snowflake.createConnection({
   warehouse: 'TESTING'
 });
 
+
 connection.connect((err, conn) => {
   if (err) {
     console.error('Error connecting to Snowflake:', err.message);
@@ -25,7 +19,7 @@ connection.connect((err, conn) => {
 
   console.log('Connected to Snowflake');
 
-  const sqlQuery = 'SELECT SYSTEM$WAIT(120)'; // Consulta que durará 30 segundos
+  const sqlQuery = 'SELECT SYSTEM$WAIT(120)'; // Consulta que durará 120 segundos
 
   const statement = conn.execute({
     sqlText: sqlQuery,
@@ -35,27 +29,21 @@ connection.connect((err, conn) => {
         return;
       }
       console.log('Query executed successfully');
-      conn.destroy((err) => {
-        if (err) {
-          console.error('Error closing connection:', err.message);
-          return;
-        }
-        console.log('Connection closed');
-        process.exit(0); // Terminar el programa después de cerrar la conexión
-      });
     }
   });
 
-  // Terminar la conexión y el programa después de 30 segundos, independientemente del estado de la consulta
-  setTimeout(() => {
+  
+  //setTimeout(() => {
     //statement.cancel(); // Cancelar la consulta (si aún está en ejecución)
-    conn.destroy((err) => {
-      if (err) {
-        console.error('Error closing connection:', err.message);
-        return;
-      }
-      console.log('Connection closed due to timeout');
-      process.exit(0); // Terminar el programa después de cerrar la conexión debido al tiempo transcurrido
-    });
-  }, 5000); // 30 segundos en milisegundos
+
+  // Cerrar la conexión y terminar el programa, independientemente del estado de la consulta
+  conn.destroy((err) => {
+    if (err) {
+      console.error('Error closing connection:', err.message);
+      return;
+    }
+    console.log('Connection closed due to timeout');
+    process.exit(0); // Terminar el programa después de cerrar la conexión debido al tiempo transcurrido
+  });
+  //}, 5000); // 30 segundos en milisegundos
 });

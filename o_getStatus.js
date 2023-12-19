@@ -3,13 +3,7 @@ const snowflake = require('snowflake-sdk');
 
 
 //Queries to execute
-const queryList = [
-  'SELECT SYSTEM$WAIT(10)',
-  'SELECT * FROM testeo WHERE ID=1',
-  'SELECT * FROM testeo WHERE ID=2'
-];
-const queryIDs = ['01b1011c-0303-38a6-0002-10da0001a01a'];
-
+const queryIDs = ['01b11314-0303-3ba0-0002-10da0001e02e'];
 
 //Snowflake connection definition
 const connection = snowflake.createConnection({
@@ -21,7 +15,6 @@ const connection = snowflake.createConnection({
   warehouse: 'TESTING'
 });
 
-
 //Snowflake connection opening
 connection.connect((err, conn) => {
   if (err) {
@@ -31,39 +24,42 @@ connection.connect((err, conn) => {
   console.log('Connected to Snowflake');
 });
 
-
+// Query Status exctraction
 let count = 0;
 
-async function printHello (){
+// This function check the Query Status every 3 seconds 
+async function QueryStatusObtaining (){
   try {
-    if (count < 4) {
+    if (count < 4) { //Check the Query Status 4 times
 
-      // Se verifica que exista al menos un queryID
-      if (queryIDs.length > 0) {
+      if (queryIDs.length > 0) { //If there is at least one QueryID to obtain the status
         console.log('Intentando obtener estado de la primera query...');
 
-        let a = await connection.getQueryStatus('01b1011c-0303-38a6-0002-10da0001a01a', (err, status) => {
+        let status = await connection.getQueryStatus('01b11314-0303-3ba0-0002-10da0001e02e', (err, stat) => { //This function returns the status of the query
           if (err) {
             console.error('Error obteniendo estado de la query:', err.message);
-          } else {
-            console.log("AAAAAA")
-            console.log('Estado de la primera query:', status)
-            return status;
+          } 
+          else { 
+            return stat;
           }
         });
-        console.log(a)
-      } else {
+        console.log("El estado de la query es:", status)
+      } 
+      
+      else {
         console.log('No hay query IDs disponibles');
       }
 
       count++;
-      setTimeout(printHello, 3000); // Llamada recursiva cada 3 segundos
+      setTimeout(QueryStatusObtaining, 3000); // Llamada recursiva cada 3 segundos
     }
-  } catch (err) {
+  } 
+  
+  catch (err) {
     console.error('Error:', err.message);
     count++; // Incrementar el contador para continuar con la siguiente iteración
-    setTimeout(printHello, 3000); // Llamada recursiva cada 3 segundos
+    setTimeout(QueryStatusObtaining, 3000); // Llamada recursiva cada 3 segundos
   }
 };
 
-printHello(); // Iniciar la primera ejecución
+QueryStatusObtaining(); // Iniciar la primera ejecución
