@@ -19,7 +19,7 @@ connection.connect((err, conn) => {
 
   console.log('Connected to Snowflake');
 
-  const sqlQuery = 'SELECT SYSTEM$WAIT(120)'; // Consulta que durará 120 segundos
+  const sqlQuery = 'SELECT SYSTEM$WAIT(10)'; // Consulta que durará 120 segundos
 
   const statement = conn.execute({
     sqlText: sqlQuery,
